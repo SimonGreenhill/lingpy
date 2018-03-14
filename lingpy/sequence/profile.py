@@ -180,10 +180,13 @@ def context_profile(wordlist, ref='ipa', col="doculect",
             for segment in [x for x in word if x not in ' '.join(cleaned_string)]:
                 profile[segment] += [(language, word)]
                 nulls.add(segment)
+    
+    for s in '^$':
+        yield s, 'NULL', '', '', '', ''
 
     for idx, (s, entries) in enumerate(sorted(profile.items(), key=lambda x:
         len(x[1]), reverse=True)):
-        sclass = token2class(s, 'dolgo')
+        sclass = token2class(s.strip('^$'), 'dolgo')
         words, langs = [l[1] for l in entries], [l[0] for l in entries]
         languages = ', '.join(sorted(set(langs), key=lambda x: langs.count(x),
             reverse=True))
